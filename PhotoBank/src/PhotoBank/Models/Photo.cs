@@ -4,7 +4,7 @@ namespace PhotoBank.Models
 {
     public class Photo
     {
-        [Required]
+        [Key]
         public int Id { get; set; }
 
         [Required]
