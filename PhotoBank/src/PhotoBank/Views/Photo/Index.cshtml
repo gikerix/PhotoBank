@@ -1,0 +1,19 @@
+﻿@model List<PhotoBank.Models.Photo>
+<div style="padding:4px">
+    <form asp-action="UploadPhoto" asp-controller="Photo"
+          method="post"
+          enctype="multipart/form-data">
+        <input type="file" name="files" />
+        <input type="submit" value="Upload selected fies" />
+    </form>
+</div>
+
+@{    
+    foreach (var photo in Model)
+    {
+        var base64 = Convert.ToBase64String(photo.Data);
+        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+        <img src="@imgSrc" style="height:100px; width:100px; border:4px double black"/>
+    }
+}
