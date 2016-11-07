@@ -13,7 +13,19 @@
     {
         var base64 = Convert.ToBase64String(photo.Data);
         var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+        var id = photo.Id;
 
-        <img src="@imgSrc" style="height:100px; width:100px; border:4px double black"/>
+        <table>
+            <tr>
+                <td>
+                    <img src="@imgSrc" style="height:100px; width:100px; border:4px double black" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a asp-controller="Photo" asp-action="DeletePhoto" asp-route-photoIndex=@id>Delete</a>
+                </td>
+            </tr>
+        </table>
     }
 }
