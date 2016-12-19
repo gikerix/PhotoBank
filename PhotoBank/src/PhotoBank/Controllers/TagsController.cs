@@ -17,10 +17,31 @@ namespace PhotoBank.Controllers
 
         public IActionResult Index()
         {
-            List<SelectList> list = new List<SelectList>();
-            list.Add( new SelectList())
-            ViewBag.TagList = db.Tags.Select(t => new SelectListItem(t.TagPhrase));
-            return View();
+            //ViewBag.TagList = db.Tags.Select(t => new SelectListItem()
+            //{
+            //    Text = t.TagPhrase,
+            //    Value = t.TagID.ToString(),
+            //});
+            return View(db.Tags.ToList());
+        }
+
+        [HttpPost]
+        public IActionResult CreateNewTag(Tag tag)            
+        {
+            if (string.IsNullOrEmpty(tag.TagPhrase))
+                return RedirectToAction("Index");
+            db.Tags.Add(tag);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteTag(int tagIndex)
+        {
+            var tag = db.Tags.Where(p => p.TagID == tagIndex);
+            foreach (var t in tag)
+                db.Tags.Remove(t);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
