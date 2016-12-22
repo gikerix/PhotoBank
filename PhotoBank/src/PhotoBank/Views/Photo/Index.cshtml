@@ -8,17 +8,40 @@
     </form>
 </div>
 
-@{    
-    foreach (var photo in Model)
+@foreach (var photo in Model)
     {
         var base64 = Convert.ToBase64String(photo.Data);
         var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-        var id = photo.Id;
-
+        var id = photo.PhotoID;
         <table>
             <tr>
                 <td>
-                    <img src="@imgSrc" style="height:100px; width:100px; border:4px double black" />
+                    <img src="@imgSrc" style="height:100px; width:100px; border:4px double black" />                     
+                </td>
+                <td valign="top"> 
+                    @if (photo.PhotoTags.Count > 0)
+                    {
+                        <table>
+                            @foreach (var tag in photo.PhotoTags)
+                            {
+                            <tr>
+                                <td>
+                                    @tag.Tag.TagPhrase;
+                                </td>    
+                            </tr>
+                            }
+                        </table>
+                    }                    
+                    @*<script>
+                        $("#tagList").change(function () {
+                            $(this).parents("form").submit()
+                        });
+                    </script>*@
+                    @*<form asp-action="AttachTagToPhoto" asp-controller="Photo">*@
+                        <select asp-items="@ViewBag.TagList" style="margin-left:10px" id="tagList" onchange="AttachTagToPhoto(this.value, @id)">
+                            <option>Select tag</option>
+                        </select>
+                    @*</form>*@
                 </td>
             </tr>
             <tr>
@@ -28,4 +51,3 @@
             </tr>
         </table>
     }
-}

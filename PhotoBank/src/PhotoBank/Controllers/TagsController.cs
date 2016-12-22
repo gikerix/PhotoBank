@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+
 using System.Linq;
 using System.Collections.Generic;
 using PhotoBank.Models;
@@ -16,12 +16,7 @@ namespace PhotoBank.Controllers
         }
 
         public IActionResult Index()
-        {
-            //ViewBag.TagList = db.Tags.Select(t => new SelectListItem()
-            //{
-            //    Text = t.TagPhrase,
-            //    Value = t.TagID.ToString(),
-            //});
+        {            
             return View(db.Tags.ToList());
         }
 

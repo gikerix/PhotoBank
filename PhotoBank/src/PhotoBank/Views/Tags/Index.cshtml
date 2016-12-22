@@ -4,18 +4,18 @@
     method="post">
     <input type="hidden" name="PhoneId" />
     <input type="text" name="TagPhrase" />
-    <input type="button" value="Create new tag" /> 
+    <input type="submit" value="Create new tag" /> 
 </form>
 
 <label> Existing Tags</label>
 <table>
-    @{ 
+    @{         
         foreach (var tag in Model)
         {
             var tagId = tag.TagID;
             <tr>
                 <td> @tag.TagPhrase</td>
-                <td> <a asp-controller="Tags" asp-action="DeleteTag" asp-route-tagIndex=@tagId>Delete</a></td>
+                <td> <a asp-controller="Tags" asp-action="DeleteTag" asp-route-tagIndex=@tagId style="margin-left:5px">Delete</a></td>
             </tr>
         }
     }

@@ -4,9 +4,9 @@ namespace PhotoBank.Models
 {
     public class PhotoTags
     {
-        [Required]
-        int PhotoID { get; set; }
-        [Required]
-        int TagID { get; set; }        
+        public int PhotoID { get; set; }
+        public Photo Photo { get; set; }
+        public int TagID { get; set; }
+        public Tag Tag { get; set; }
     }
 }

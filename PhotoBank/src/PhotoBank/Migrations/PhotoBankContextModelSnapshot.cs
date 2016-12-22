@@ -18,7 +18,7 @@ namespace PhotoBank.Migrations
 
             modelBuilder.Entity("PhotoBank.Models.Photo", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("PhotoID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<byte[]>("Data")
@@ -27,9 +27,24 @@ namespace PhotoBank.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.HasKey("Id");
+                    b.HasKey("PhotoID");
 
                     b.ToTable("Photos");
+                });
+
+            modelBuilder.Entity("PhotoBank.Models.PhotoTags", b =>
+                {
+                    b.Property<int>("PhotoID");
+
+                    b.Property<int>("TagID");
+
+                    b.HasKey("PhotoID", "TagID");
+
+                    b.HasIndex("PhotoID");
+
+                    b.HasIndex("TagID");
+
+                    b.ToTable("PhotoTags");
                 });
 
             modelBuilder.Entity("PhotoBank.Models.Tag", b =>
@@ -43,6 +58,19 @@ namespace PhotoBank.Migrations
                     b.HasKey("TagID");
 
                     b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("PhotoBank.Models.PhotoTags", b =>
+                {
+                    b.HasOne("PhotoBank.Models.Photo", "Photo")
+                        .WithMany("PhotoTags")
+                        .HasForeignKey("PhotoID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PhotoBank.Models.Tag", "Tag")
+                        .WithMany("PhotoTags")
+                        .HasForeignKey("TagID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }
