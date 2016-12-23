@@ -72,10 +72,12 @@ namespace PhotoBank.Controllers
             var tag = db.Tags.Where(t => t.TagID == tagID);
             if (tag.Count() != 1)
                 return RedirectToAction("Index");
-            var photo = db.Photos.Where(p => p.PhotoID == photoID);
-            if (tag.Count() != 1)
+            var photo = db.Photos.Where(p => p.PhotoID == photoID).Include(p => p.PhotoTags);
+            if (photo.Count() != 1)
                 return RedirectToAction("Index");
             Photo ph = photo.FirstOrDefault();
+            if (ph.PhotoTags.Where(pt=> pt.TagID == tagID).Count() > 0)
+                return RedirectToAction("Index");
             ph.PhotoTags.Add(new PhotoTags { PhotoID = photoID, TagID = tagID });
             db.SaveChanges();
             return RedirectToAction("Index");
