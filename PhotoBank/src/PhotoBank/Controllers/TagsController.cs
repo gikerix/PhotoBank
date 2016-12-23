@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
 using PhotoBank.Models;
@@ -37,6 +37,11 @@ namespace PhotoBank.Controllers
                 db.Tags.Remove(t);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public IActionResult TagPhotos(int tagID)
+        {            
+            return View(db.PhotoTags.Include(pt => pt.Photo).Where(pt => pt.TagID == tagID).Select(pt => pt.Photo).ToList());
         }
     }
 }

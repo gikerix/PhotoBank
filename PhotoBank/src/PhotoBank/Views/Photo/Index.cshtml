@@ -25,23 +25,16 @@
                             @foreach (var tag in photo.PhotoTags)
                             {
                             <tr>
-                                <td>
-                                    @tag.Tag.TagPhrase;
+                                <td style="padding-left:10px">
+                                    <a asp-controller="Tags" asp-action="TagPhotos" asp-route-tagID=@tag.Tag.TagID>@tag.Tag.TagPhrase</a>
                                 </td>    
                             </tr>
                             }
                         </table>
-                    }                    
-                    @*<script>
-                        $("#tagList").change(function () {
-                            $(this).parents("form").submit()
-                        });
-                    </script>*@
-                    @*<form asp-action="AttachTagToPhoto" asp-controller="Photo">*@
-                        <select asp-items="@ViewBag.TagList" style="margin-left:10px" id="tagList" onchange="AttachTagToPhoto(this.value, @id)">
-                            <option>Select tag</option>
-                        </select>
-                    @*</form>*@
+                    }
+                    <select asp-items="@ViewBag.TagList" style="margin-left:10px" id="tagList" onchange="AttachTagToPhoto(this.value, @id)">
+                        <option>Select tag</option>
+                    </select>
                 </td>
             </tr>
             <tr>
