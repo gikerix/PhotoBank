@@ -35,7 +35,7 @@ namespace PhotoBank.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadPhoto()
+        public IActionResult UploadPhoto(string photoName)
         {            
             var photos = Request.Form.Files;
             if (photos.Count == 0)
@@ -50,7 +50,7 @@ namespace PhotoBank.Controllers
                     db.Photos.Add(new Photo()
                     {
                         Data = data,
-                        Name = "Default Name"
+                        Name = string.IsNullOrEmpty(photoName.Trim()) ? "Default Name" : photoName
                     });
                 }               
             }

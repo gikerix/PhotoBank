@@ -4,10 +4,13 @@
 {
     var base64 = Convert.ToBase64String(photo.Data);
     var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+    var name = photo.Name;
     <table>
         <tr>
             <td style="padding:2px">
+                @name<br>
                 <img src="@imgSrc" style="height:100px; width:100px; border:4px double black" />
+                
             </td>            
         </tr>
     </table>
