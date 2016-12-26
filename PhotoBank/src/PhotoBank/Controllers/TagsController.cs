@@ -17,7 +17,7 @@ namespace PhotoBank.Controllers
 
         public IActionResult Index()
         {            
-            return View(db.Tags.ToList());
+            return View("TagIndex", db.Tags.ToList());
         }
 
         [HttpPost]

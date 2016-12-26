@@ -31,7 +31,7 @@ namespace PhotoBank.Controllers
             {
                 photo.PhotoTags = photoTags.Where(pt => pt.PhotoID == photo.PhotoID).ToList();
             }
-            return View(photos);
+            return View("PhotoIndex", photos);
         }
 
         [HttpPost]
