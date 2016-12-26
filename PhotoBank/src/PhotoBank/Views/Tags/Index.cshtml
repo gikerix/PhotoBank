@@ -14,7 +14,7 @@
         {
             var tagId = tag.TagID;
             <tr>
-                <td> @tag.TagPhrase</td>
+                <td> <a asp-controller="Tags" asp-action="TagPhotos" asp-route-tagID=@tag.TagID>@tag.TagPhrase</a></td>
                 <td> <a asp-controller="Tags" asp-action="DeleteTag" asp-route-tagIndex=@tagId style="margin-left:5px">Delete</a></td>
             </tr>
         }
