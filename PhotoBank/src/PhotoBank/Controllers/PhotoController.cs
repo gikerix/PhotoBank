@@ -50,7 +50,8 @@ namespace PhotoBank.Controllers
                     db.Photos.Add(new Photo()
                     {
                         Data = data,
-                        Name = string.IsNullOrEmpty(photoName.Trim()) ? "Default Name" : photoName
+                        Name = string.IsNullOrEmpty(photoName.Trim()) ? "Default Name" : photoName,
+                        FileExtention = System.IO.Path.GetExtension(photo.FileName),
                     });
                 }               
             }
@@ -81,6 +82,16 @@ namespace PhotoBank.Controllers
             ph.PhotoTags.Add(new PhotoTags { PhotoID = photoID, TagID = tagID });
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public FileResult DownloadPhoto(int photoID)
+        {
+            var photo = db.Photos.Where(p => p.PhotoID == photoID);
+            if (photo.Count() != 1)
+                RedirectToAction("Index");
+            Photo ph = photo.FirstOrDefault();
+            string extention = string.IsNullOrEmpty(ph.FileExtention) ? "unknown" : ph.FileExtention;
+            return File(ph.Data, string.Format("applocation/{0}", extention), string.Format("{0}.{1}", ph.Name, extention));
         }
     }
 }

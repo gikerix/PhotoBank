@@ -18,6 +18,8 @@ namespace PhotoBank.Models
 
         [Required]
         public string Name { get; set; }
+        
+        public string FileExtention { get; set; }
 
         public List<PhotoTags> PhotoTags {get; set; }
     }
