@@ -1,4 +1,4 @@
-﻿@model List<PhotoBank.Models.Photo>
+﻿@model PhotoBank.ViewModels.TagsPhotoIndexViewModel
 <div style="padding:4px">
     <form asp-action="UploadPhoto" asp-controller="Photo"
           method="post"
@@ -9,7 +9,7 @@
     </form>
 </div>
 
-@foreach (var photo in Model)
+@foreach (var photo in Model.Photos)
 {
     var base64 = Convert.ToBase64String(photo.Data);
     var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
@@ -35,7 +35,7 @@
                         }
                     </table>
                 }
-                <select asp-items="@ViewBag.TagList" style="margin-left:10px" id="tagList" onchange="AttachTagToPhoto(this.value, @id)">
+                <select asp-items="@Model.TagSelectionList" style="margin-left:10px" id="tagList" onchange="AttachTagToPhoto(this.value, @id)">
                     <option>Select tag</option>
                 </select>
             </td>

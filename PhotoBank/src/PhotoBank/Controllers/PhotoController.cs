@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 
 using PhotoBank.Models;
+using PhotoBank.ViewModels;
 namespace PhotoBank.Controllers
 {
     public class PhotoController : Controller
@@ -20,18 +21,20 @@ namespace PhotoBank.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.TagList = db.Tags.Select(t => new SelectListItem()
-            {
-                Text = t.TagPhrase,
-                Value = t.TagID.ToString(),
-            });
-            List<PhotoTags> photoTags = db.PhotoTags.Include(pt => pt.Tag).Include(pt => pt.Photo).ToList();
-            List<Photo> photos = db.Photos.Include(p => p.PhotoTags).ToList();
+            TagsPhotoIndexViewModel viewModel = new TagsPhotoIndexViewModel();
+            viewModel.TagSelectionList = db.Tags.Select(t => new SelectListItem()
+                                                            {
+                                                                Text = t.TagPhrase,
+                                                                Value = t.TagID.ToString(),
+                                                            });
+            var photoTags = db.PhotoTags.Include(pt => pt.Tag).Include(pt => pt.Photo);
+            var photos = db.Photos.Include(p => p.PhotoTags);
             foreach (var photo in photos)
             {
                 photo.PhotoTags = photoTags.Where(pt => pt.PhotoID == photo.PhotoID).ToList();
             }
-            return View("PhotoIndex", photos);
+            viewModel.Photos = photos;
+            return View("PhotoIndex", viewModel);
         }
 
         [HttpPost]
