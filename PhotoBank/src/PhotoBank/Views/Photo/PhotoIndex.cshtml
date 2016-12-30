@@ -1,12 +1,14 @@
 ﻿@model PhotoBank.ViewModels.TagsPhotoIndexViewModel
 <div style="padding:4px">
-    <form asp-action="UploadPhoto" asp-controller="Photo"
-          method="post"
-          enctype="multipart/form-data">
-        <input type="file" name="files" />
-        <input type="text" name="photoName" />
-        <input type="submit" value="Upload selected fies" />
-    </form>
+    @{ 
+        @using (Html.BeginForm("UploadPhoto", "Photo", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <input type="file" name="files" />
+            @Html.TextBox("photoName")        
+            <input type="submit" value="Upload selected fies" />
+        }
+    }
+
 </div>
 
 @foreach (var photo in Model.Photos)
@@ -29,23 +31,24 @@
                         {
                         <tr>
                             <td style="padding-left:10px">
-                                <a asp-controller="Tags" asp-action="TagPhotos" asp-route-tagID=@tag.Tag.TagID>@tag.Tag.TagPhrase</a>
+                                @Html.ActionLink(tag.Tag.TagPhrase, "TagPhotos", "Tags", new {tagID = tag.Tag.TagID })
                             </td>    
                         </tr>
                         }
                     </table>
                 }
+                @*@Html.DropDownList("tagList", Model.TagSelectionList, "Select Tag",  new {onchange= "AttachTagToPhoto(this.value, id)"})*@
                 <select asp-items="@Model.TagSelectionList" style="margin-left:10px" id="tagList" onchange="AttachTagToPhoto(this.value, @id)">
                     <option>Select tag</option>
                 </select>
             </td>
             <td>
-                <a asp-controller="Photo" asp-action="DownloadPhoto" asp-route-photoID=@id>Download Photo</a>
+                @Html.ActionLink("Download Photo", "DownloadPhoto", new { photoID = id })
             </td>
         </tr>
         <tr>
             <td>
-                <a asp-controller="Photo" asp-action="DeletePhoto" asp-route-photoIndex=@id>Delete</a>
+                @Html.ActionLink("Delete", "DeletePhoto", new { photoID = id })
             </td>
         </tr>
     </table>
