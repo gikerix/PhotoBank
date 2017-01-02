@@ -8,7 +8,6 @@
             <input type="submit" value="Upload selected fies" />
         }
     }
-
 </div>
 
 @foreach (var photo in Model.Photos)
@@ -37,7 +36,6 @@
                         }
                     </table>
                 }
-                @*@Html.DropDownList("tagList", Model.TagSelectionList, "Select Tag",  new {onchange= "AttachTagToPhoto(this.value, id)"})*@
                 <select asp-items="@Model.TagSelectionList" style="margin-left:10px" id="tagList" onchange="AttachTagToPhoto(this.value, @id)">
                     <option>Select tag</option>
                 </select>
