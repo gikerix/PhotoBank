@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
 using PhotoBank.Models;
 
 namespace PhotoBank.TagHelpers
@@ -13,28 +14,54 @@ namespace PhotoBank.TagHelpers
         public ViewModels.TagsPhotoIndexViewModel photoContent { get; set; }
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            var tagSelector = new TagBuilder("select");
+            var option = new TagBuilder("option");
+            option.Attributes.Add("value", "-1");
+            option.InnerHtml.Append("Select Tag");
+            tagSelector.InnerHtml.AppendHtml(option);
+
+            foreach (var tag in photoContent.TagSelectionList)
+            {
+                option = new TagBuilder("option");
+                option.Attributes.Add("value", tag.Value);
+                option.InnerHtml.Append(tag.Text);
+                tagSelector.InnerHtml.AppendHtml(option);
+            }
+            
             output.TagName = "table";            
             List<Photo> photos = photoContent.Photos.ToList();
-            var table = new StringBuilder();            
+            TagBuilder table = new TagBuilder("table");
             TagBuilder row = new TagBuilder("tr");
             TagBuilder cell = new TagBuilder("td");
-            TagBuilder image = new TagBuilder("img");
-            using (var writer = new System.IO.StringWriter())
+            TagBuilder image = new TagBuilder("img");            
+            for (int i = 0; i < photos.Count; ++i)
             {
-                for (int i = 0; i < photos.Count; ++i)
-                {
-                    image.InnerHtml.Clear();
-                    image.Attributes.Clear();
-                    cell.InnerHtml.Clear();
-                    var photo = photos[i];
-                    var base64 = Convert.ToBase64String(photo.Data);
-                    image.MergeAttribute("src", string.Format("data:image/gif;base64,{0}", base64));
-                    cell.InnerHtml.AppendHtml(image);
-                    row.InnerHtml.AppendHtml(cell);
-                    table.AppendLine(row.InnerHtml.ToString());
-                }
+
+                image.InnerHtml.Clear();
+                image.Attributes.Clear();
+                cell.InnerHtml.Clear();
+                var photo = photos[i];
+                var base64 = Convert.ToBase64String(photo.Data);
+                image.MergeAttribute("src", string.Format("data:image/gif;base64,{0}", base64));
+                image.MergeAttribute("style", "height: 100px; width: 100px; border: 4px double black");
+                cell.InnerHtml.AppendHtml(image);
+                row.InnerHtml.AppendHtml(cell);
+                var cell2 = new TagBuilder("td");
+                cell2.InnerHtml.Clear();
+                cell2.InnerHtml.AppendHtml(tagSelector);
+                row.InnerHtml.AppendHtml(cell2);
+
+                //TagBuilder tagsTable = new TagBuilder("table");
+                //TagBuilder taqsRow = new TagBuilder("tr");
+                //TagBuilder tagCell = new TagBuilder("td");
+                //for (int j = 0; j < photo.PhotoTags.Count(); ++j)
+                //{
+                //    tagCell.InnerHtml.Append(photo.PhotoTags[i])                    
+                //}
+                table.InnerHtml.AppendHtml(row);
             }
-            output.Content.SetContent(table.ToString());
+            output.Content.AppendHtml(table);            
+            
             //output.TagName = "table";
             //string rows = string.Empty;
 
