@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -33,7 +32,7 @@ namespace PhotoBank.Controllers
             {
                 photo.PhotoTags = photoTags.Where(pt => pt.PhotoID == photo.PhotoID).ToList();
             }
-            viewModel.Photos = photos;
+            viewModel.Photos = photos;            
             return View("PhotoIndex", viewModel);
         }
 

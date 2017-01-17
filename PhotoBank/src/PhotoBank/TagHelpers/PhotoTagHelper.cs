@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
 using PhotoBank.Models;
 
 namespace PhotoBank.TagHelpers
@@ -36,7 +34,6 @@ namespace PhotoBank.TagHelpers
             TagBuilder image = new TagBuilder("img");            
             for (int i = 0; i < photos.Count; ++i)
             {
-
                 image.InnerHtml.Clear();
                 image.Attributes.Clear();
                 cell.InnerHtml.Clear();
@@ -47,17 +44,27 @@ namespace PhotoBank.TagHelpers
                 cell.InnerHtml.AppendHtml(image);
                 row.InnerHtml.AppendHtml(cell);
                 var cell2 = new TagBuilder("td");
+                cell2.MergeAttribute("valign", "top");
                 cell2.InnerHtml.Clear();
+                tagSelector.MergeAttribute("onchange", string.Format("AttachTagToPhoto(this.value, {0})", photo.PhotoID));
                 cell2.InnerHtml.AppendHtml(tagSelector);
                 row.InnerHtml.AppendHtml(cell2);
 
-                //TagBuilder tagsTable = new TagBuilder("table");
-                //TagBuilder taqsRow = new TagBuilder("tr");
-                //TagBuilder tagCell = new TagBuilder("td");
-                //for (int j = 0; j < photo.PhotoTags.Count(); ++j)
-                //{
-                //    tagCell.InnerHtml.Append(photo.PhotoTags[i])                    
-                //}
+                TagBuilder tagTable = new TagBuilder("table");
+                TagBuilder tagRow = new TagBuilder("tr");
+                TagBuilder tagCell = new TagBuilder("td");
+                TagBuilder action = new TagBuilder("a");
+                
+                for (int j = 0; j < photo.PhotoTags.Count(); ++j)
+                {
+                    action.InnerHtml.Clear();
+                    action.InnerHtml.Append(photo.PhotoTags[i].Tag.TagPhrase);
+                    action.MergeAttribute("href", string.Format("/Tags/TagPhotos/?tagID={0}", photo.PhotoTags[i].TagID));
+                    tagCell.InnerHtml.AppendHtml(action);
+                    tagRow.InnerHtml.AppendHtml(tagCell);
+                    tagTable.InnerHtml.AppendHtml(tagRow);
+                }
+                row.InnerHtml.AppendHtml(tagTable);
                 table.InnerHtml.AppendHtml(row);
             }
             output.Content.AppendHtml(table);            
