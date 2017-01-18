@@ -14,7 +14,7 @@
         {
             var tagId = tag.TagID;
             <tr>
-                <td> @Html.ActionLink(tag.TagPhrase, "TagPhotes", "Tags")
+                <td> @Html.ActionLink(tag.TagPhrase, "TagPhotos", "Tags", new { tagID = tagId }) </td>
                 <td> @Html.ActionLink("Delete", "DeleteTag", "Tags", null, new { style = "margin-left:5px" })</td>
             </tr>
         }

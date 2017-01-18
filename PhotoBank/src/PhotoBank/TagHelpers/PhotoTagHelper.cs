@@ -12,60 +12,49 @@ namespace PhotoBank.TagHelpers
         public ViewModels.TagsPhotoIndexViewModel photoContent { get; set; }
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var tagSelector = new TagBuilder("select");
-            var option = new TagBuilder("option");
-            option.Attributes.Add("value", "-1");
-            option.InnerHtml.Append("Select Tag");
-            tagSelector.InnerHtml.AppendHtml(option);
-
-            foreach (var tag in photoContent.TagSelectionList)
-            {
-                option = new TagBuilder("option");
-                option.Attributes.Add("value", tag.Value);
-                option.InnerHtml.Append(tag.Text);
-                tagSelector.InnerHtml.AppendHtml(option);
-            }
-            
             output.TagName = "table";            
             List<Photo> photos = photoContent.Photos.ToList();
             TagBuilder table = new TagBuilder("table");
-            TagBuilder row = new TagBuilder("tr");
-            TagBuilder cell = new TagBuilder("td");
-            TagBuilder image = new TagBuilder("img");            
             for (int i = 0; i < photos.Count; ++i)
             {
+                TagBuilder image = new TagBuilder("img");
                 image.InnerHtml.Clear();
                 image.Attributes.Clear();
-                cell.InnerHtml.Clear();
+                TagBuilder imageCell = new TagBuilder("td");                
                 var photo = photos[i];
                 var base64 = Convert.ToBase64String(photo.Data);
                 image.MergeAttribute("src", string.Format("data:image/gif;base64,{0}", base64));
                 image.MergeAttribute("style", "height: 100px; width: 100px; border: 4px double black");
-                cell.InnerHtml.AppendHtml(image);
-                row.InnerHtml.AppendHtml(cell);
-                var cell2 = new TagBuilder("td");
-                cell2.MergeAttribute("valign", "top");
-                cell2.InnerHtml.Clear();
+                imageCell.InnerHtml.AppendHtml(image);
+                TagBuilder row = new TagBuilder("tr");
+                row.InnerHtml.AppendHtml(imageCell);
+                TagBuilder tagsCell = new TagBuilder("td");
+                tagsCell.MergeAttribute("valign", "top");
+                tagsCell.InnerHtml.Clear();
+                TagBuilder tagSelector = CreateTagSelector();
+                tagSelector.Attributes.Clear();
                 tagSelector.MergeAttribute("onchange", string.Format("AttachTagToPhoto(this.value, {0})", photo.PhotoID));
-                cell2.InnerHtml.AppendHtml(tagSelector);
-                row.InnerHtml.AppendHtml(cell2);
-
+                tagsCell.InnerHtml.AppendHtml(tagSelector);                
                 TagBuilder tagTable = new TagBuilder("table");
-                TagBuilder tagRow = new TagBuilder("tr");
-                TagBuilder tagCell = new TagBuilder("td");
-                TagBuilder action = new TagBuilder("a");
-                
                 for (int j = 0; j < photo.PhotoTags.Count(); ++j)
-                {
-                    action.InnerHtml.Clear();
-                    action.InnerHtml.Append(photo.PhotoTags[i].Tag.TagPhrase);
-                    action.MergeAttribute("href", string.Format("/Tags/TagPhotos/?tagID={0}", photo.PhotoTags[i].TagID));
+                {                    
+                    TagBuilder action = new TagBuilder("a");                
+                    action.InnerHtml.Append(photo.PhotoTags[j].Tag.TagPhrase);
+                    action.MergeAttribute("href", string.Format("/Tags/TagPhotos/?tagID={0}", photo.PhotoTags[j].TagID));
+                    TagBuilder tagCell = new TagBuilder("td");
                     tagCell.InnerHtml.AppendHtml(action);
+                    TagBuilder tagRow = new TagBuilder("tr");
                     tagRow.InnerHtml.AppendHtml(tagCell);
                     tagTable.InnerHtml.AppendHtml(tagRow);
                 }
-                row.InnerHtml.AppendHtml(tagTable);
+                tagsCell.InnerHtml.AppendHtml(tagTable);
+                row.InnerHtml.AppendHtml(tagsCell);
+                //TagBuilder dowloadCell = new TagBuilder("td");
+                //TagBuilder downloadAction = new TagBuilder("a");
+                //dou
                 table.InnerHtml.AppendHtml(row);
+                
+                //TagBuilder deleteCell = new TagBuilder("td");
             }
             output.Content.AppendHtml(table);            
             
@@ -119,6 +108,24 @@ namespace PhotoBank.TagHelpers
 
             //    </ table >
 
+        }
+
+        private TagBuilder CreateTagSelector()
+        {
+            TagBuilder tagSelector = new TagBuilder("select");
+            TagBuilder option = new TagBuilder("option");
+            option.Attributes.Add("value", "-1");
+            option.InnerHtml.Append("Select Tag");
+            tagSelector.InnerHtml.AppendHtml(option);
+
+            foreach (var tag in photoContent.TagSelectionList)
+            {
+                option = new TagBuilder("option");
+                option.Attributes.Add("value", tag.Value);
+                option.InnerHtml.Append(tag.Text);
+                tagSelector.InnerHtml.AppendHtml(option);
+            }
+            return tagSelector;
         }
     }
 }
