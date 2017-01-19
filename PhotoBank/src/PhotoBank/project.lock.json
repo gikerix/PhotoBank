@@ -1555,7 +1555,7 @@
           "lib/netstandard1.3/Microsoft.VisualBasic.dll": {}
         }
       },
-      "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0": {
+      "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.1.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
@@ -5487,12 +5487,12 @@
         "ref/wpa81/_._"
       ]
     },
-    "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0": {
-      "sha512": "f01OAOfsctcN7gSa05qYK8AgU1E/BFeZizvszNJMXY3BMJbYSj+3+YqyLunkMSf7LN92kcl7gQsAY9FayEH3ag==",
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.1.0": {
+      "sha512": "iVJCfMpPqZE2QaEAGT5MoEYM65l59rDSNERnZQmJDOiE+itZZ6ZP5wh+Lh9Lv0Nt1SbgvXdN3z39MM435ITldA==",
       "type": "package",
-      "path": "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0",
+      "path": "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.1.0",
       "files": [
-        "Microsoft.VisualStudio.Web.BrowserLink.Loader.14.0.0.nupkg.sha512",
+        "Microsoft.VisualStudio.Web.BrowserLink.Loader.14.1.0.nupkg.sha512",
         "Microsoft.VisualStudio.Web.BrowserLink.Loader.nuspec",
         "lib/net451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll",
         "lib/net451/Microsoft.VisualStudio.Web.BrowserLink.Loader.xml",
@@ -10791,7 +10791,7 @@
       "Microsoft.Extensions.Logging.Debug >= 1.0.0",
       "Microsoft.Extensions.Options.ConfigurationExtensions >= 1.0.0",
       "Microsoft.NETCore.App >= 1.1.0",
-      "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0",
+      "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.1.0",
       "System.Runtime >= 4.3.0"
     ],
     ".NETCoreApp,Version=v1.0": []

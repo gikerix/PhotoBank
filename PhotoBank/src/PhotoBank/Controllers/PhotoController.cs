@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -86,11 +87,13 @@ namespace PhotoBank.Controllers
             return RedirectToAction("Index");
         }
 
-        public FileResult DownloadPhoto(int photoID)
+        public IActionResult DownloadPhoto(int photoID)
         {
-            var photo = db.Photos.Where(p => p.PhotoID == photoID);
+            List<Photo> photo = db.Photos.Where(p => p.PhotoID == photoID).ToList();
             if (photo.Count() != 1)
-                RedirectToAction("Index");
+            {                
+                return RedirectToAction("Index");
+            }
             Photo ph = photo.FirstOrDefault();
             string extention = string.IsNullOrEmpty(ph.FileExtention) ? "unknown" : ph.FileExtention;
             return File(ph.Data, string.Format("applocation/{0}", extention), string.Format("{0}.{1}", ph.Name, extention));

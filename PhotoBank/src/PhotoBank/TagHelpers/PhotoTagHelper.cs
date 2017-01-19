@@ -9,7 +9,7 @@ namespace PhotoBank.TagHelpers
 {
     public class PhotosTagHelper : TagHelper
     {
-        public ViewModels.TagsPhotoIndexViewModel photoContent { get; set; }
+        public ViewModels.TagsPhotoIndexViewModel photoContent { get; set; }       
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "table";            
@@ -49,12 +49,21 @@ namespace PhotoBank.TagHelpers
                 }
                 tagsCell.InnerHtml.AppendHtml(tagTable);
                 row.InnerHtml.AppendHtml(tagsCell);
-                //TagBuilder dowloadCell = new TagBuilder("td");
-                //TagBuilder downloadAction = new TagBuilder("a");
-                //dou
                 table.InnerHtml.AppendHtml(row);
-                
-                //TagBuilder deleteCell = new TagBuilder("td");
+                TagBuilder secondRow = new TagBuilder("tr"); 
+                TagBuilder downloadCell = new TagBuilder("td");
+                TagBuilder downloadAction = new TagBuilder("a");
+                downloadAction.InnerHtml.Append("Download");
+                downloadAction.MergeAttribute("href", string.Format("/Photo/DownloadPhoto?photoID={0}", photo.PhotoID));
+                downloadCell.InnerHtml.AppendHtml(downloadAction);
+                secondRow.InnerHtml.AppendHtml(downloadCell);
+                TagBuilder deleteCell = new TagBuilder("td");
+                TagBuilder deleteAction = new TagBuilder("a");
+                deleteAction.InnerHtml.Append("Delete");
+                deleteAction.MergeAttribute("href", string.Format("/Photo/DeletePhoto?photoID={0}", photo.PhotoID));
+                deleteCell.InnerHtml.AppendHtml(deleteAction);
+                secondRow.InnerHtml.AppendHtml(deleteCell);
+                table.InnerHtml.AppendHtml(secondRow);
             }
             output.Content.AppendHtml(table);            
             
