@@ -65,58 +65,7 @@ namespace PhotoBank.TagHelpers
                 secondRow.InnerHtml.AppendHtml(deleteCell);
                 table.InnerHtml.AppendHtml(secondRow);
             }
-            output.Content.AppendHtml(table);            
-            
-            //output.TagName = "table";
-            //string rows = string.Empty;
-
-            //{
-            //    rows += "<tr>";
-            //    rows += "<td >"
-            //    @name < br />
-            //    < img src = "@imgSrc" style = "height:100px; width:100px; border:4px double black" />
-
-            //   </ td >
-
-            //   < td valign = "top" >
-            //        @if(photo.PhotoTags.Count > 0)
-            //    {
-            //        < table >
-            //            @foreach(var tag in photo.PhotoTags)
-            //            {
-            //            < tr >
-            //                < td style = "padding-left:10px" >
-            //                     @Html.ActionLink(tag.Tag.TagPhrase, "TagPhotos", "Tags", new { tagID = tag.Tag.TagID })
-            //                 </ td >
-
-            //             </ tr >
-            //            }
-            //        </ table >
-            //    }
-            //    < select asp - items = "@Model.TagSelectionList" style = "margin-left:10px" id = "tagList" onchange = "AttachTagToPhoto(this.value, @id)" >
-
-            //                 < option > Select tag </ option >
-
-            //                </ select >
-
-            //            </ td >
-
-            //            < td >
-            //                @Html.ActionLink("Download Photo", "DownloadPhoto", new { photoID = id })
-            //            </ td >
-
-            //        </ tr >
-
-            //        < tr >
-
-            //            < td >
-            //                @Html.ActionLink("Delete", "DeletePhoto", new { photoID = id })
-            //            </ td >
-
-            //        </ tr >
-
-            //    </ table >
-
+            output.Content.AppendHtml(table);
         }
 
         private TagBuilder CreateTagSelector()
