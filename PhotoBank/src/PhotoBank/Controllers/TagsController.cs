@@ -40,8 +40,13 @@ namespace PhotoBank.Controllers
         }
 
         public IActionResult TagPhotos(int tagID)
-        {            
-            return View(db.PhotoTags.Include(pt => pt.Photo).Where(pt => pt.TagID == tagID).Select(pt => pt.Photo).ToList());
+        {
+            return View(new ViewModels.TagsPhotoIndexViewModel()
+                        {
+                            Photos = db.PhotoTags.Include(pt => pt.Photo).
+                                                  Where(pt => pt.TagID == tagID).
+                                                  Select(pt => pt.Photo).ToList()
+                        });
         }
     }
 }
