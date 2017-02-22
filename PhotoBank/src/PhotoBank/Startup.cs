@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PhotoBank.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PhotoBank
 {
@@ -27,6 +28,8 @@ namespace PhotoBank
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<PhotoBankContext>(options => options.UseSqlServer(connection));
+
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<PhotoBankContext>();
             // Add framework services.
             services.AddMvc();
         }
@@ -48,7 +51,7 @@ namespace PhotoBank
             }
 
             app.UseStaticFiles();
-
+            app.UseIdentity();
             app.UseMvc(routes =>
             {                
                 routes.MapRoute(
