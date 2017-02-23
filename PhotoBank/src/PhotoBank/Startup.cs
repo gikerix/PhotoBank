@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using PhotoBank.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
+
 namespace PhotoBank
 {
     public class Startup
@@ -31,7 +32,8 @@ namespace PhotoBank
 
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<PhotoBankContext>();
             // Add framework services.
-            services.AddMvcCore();
+            services.AddMvcCore().AddViews().AddRazorViewEngine();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

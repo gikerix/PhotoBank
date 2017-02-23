@@ -1,5 +1,21 @@
-﻿@{
+﻿@using PhotoBank.Models;
+@{
     ViewData["Title"] = "Home Page";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>@User.Identity.Name</p>
+
+    
+    <form method="post" asp-controller="Account" asp-action="LogOff">
+        <input type="submit" value="Sign out" />
+    </form>
+}
+else
+{
+    <a asp-controller="Account" asp-action="Login">Sign In</a>
+    <a asp-controller="Account" asp-action="Register">Sign Up</a>
 }
 @* !!!DON'T TOUCH we will use this code later *@
 @*<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
