@@ -31,7 +31,7 @@ namespace PhotoBank
 
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<PhotoBankContext>();
             // Add framework services.
-            services.AddMvc();
+            services.AddMvcCore();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
