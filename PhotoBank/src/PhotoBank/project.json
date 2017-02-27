@@ -27,7 +27,8 @@
       "version": "1.1.0"
     },
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
-    "System.Runtime": "4.3.0"
+    "System.Runtime": "4.3.0",
+    "MailKit": "1.10.2"
   },
 
   "tools": {

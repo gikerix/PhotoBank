@@ -1,6 +1,6 @@
 ﻿@model PhotoBank.ViewModels.RegisterViewModel
 <h2>New user registration form</h2>
-<form method="post" asp-controller="Account" asp-action="Register">
+<form method="post" asp-controller="Account" asp-action="Register" asp-route-returnUrl=@Context.Request.Path>
     <div asp-validation-summary="ModelOnly"></div>
     <div>
         <label asp-for="Email"></label><br />
