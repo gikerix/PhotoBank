@@ -1,8 +1,7 @@
 ﻿@model PhotoBank.ViewModels.LoginViewModel
 
 <h2>Login</h2>
-<form method="post" asp-controller="Account" asp-action="Login"
-            asp-route-returnUrl="@Model.ReturnUrl">
+<form method="post" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">
     <div asp-validation-summary="ModelOnly"></div>
     <div>
         <label asp-for="Email"></label><br />
