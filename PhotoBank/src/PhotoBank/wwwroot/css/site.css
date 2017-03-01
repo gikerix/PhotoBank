@@ -36,3 +36,14 @@ textarea {
     display: none
   }
 }
+
+.submitLink {
+  background-color: transparent;
+  text-decoration: underline;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+submitLink:focus {
+  outline: none;
+}

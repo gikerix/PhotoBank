@@ -34,9 +34,26 @@
                     <li><a asp-area="" asp-controller="Tags" asp-action="Index">Tags</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>                    
+                </ul>                    
+                <div class="nav pull-right" style="padding:15px">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <label style="color:white">@User.Identity.Name</label>
+                        <form method="post" asp-controller="Account" asp-action="LogOff" style="display:inline">
+                            <input type="submit" value="Sign out" class="submitLink" />
+                        </form>
+
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="~/Home/Index">Sign In</a>
+                        <a asp-controller="Account" asp-action="Register">Sign Up</a>
+                    }
+                </div>
+                
             </div>
+            
         </div>
     </div>
     <div class="container body-content">
