@@ -10,7 +10,7 @@ namespace PhotoBank.Services
         public async Task SendEmailAsync(string email, string subject, string message)
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("PhotoBank", "alexkojevnikov@mail.ru"));
+            emailMessage.From.Add(new MailboxAddress("PhotoBank", ""));
             emailMessage.To.Add(new MailboxAddress(string.Empty, email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(TextFormat.Html)
@@ -20,7 +20,7 @@ namespace PhotoBank.Services
             using (var client = new SmtpClient())
             {
                 await client.ConnectAsync("smtp.mail.ru", 465, true);
-                await client.AuthenticateAsync("alexkojevnikov@mail.ru", "polisandr23");
+                await client.AuthenticateAsync("", "");
                 await client.SendAsync(emailMessage);
                 await client.DisconnectAsync(true);
             }
