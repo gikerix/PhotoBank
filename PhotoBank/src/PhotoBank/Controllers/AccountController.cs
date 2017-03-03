@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using PhotoBank.Services;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using System.Linq;
 
 namespace PhotoBank.Controllers
 {
@@ -78,6 +79,26 @@ namespace PhotoBank.Controllers
             if (user == null)
                 return View("Error");
             var result = await userManager.ConfirmEmailAsync(user, code);
+            if (result.Succeeded)
+            {
+                int usersCount = userManager.Users.Count();
+                if (usersCount == 1)//if the user is first, it becames admin
+                {
+                    await userManager.AddToRoleAsync(user, "admin");
+                }
+                else if (usersCount > 1)
+                {
+                    await userManager.AddToRoleAsync(user, "user");
+                }
+                else
+                {
+                    View("Error");
+                }
+            }
+            else
+            {
+                View("Error");
+            }
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 

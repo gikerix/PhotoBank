@@ -3,17 +3,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using PhotoBank.Models;
-using PhotoBank.ViewModels;     
+using PhotoBank.ViewModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PhotoBank.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class UsersController : Controller
     {
         UserManager<User> userManager;
+        RoleManager<IdentityRole> roleManager;
 
-        public UsersController(UserManager<User> UserManager)
+        public UsersController(UserManager<User> UserManager, RoleManager<IdentityRole> RoleManager)
         {
             userManager = UserManager;
+            roleManager = RoleManager;
         }
 
         public IActionResult Index() => View(userManager.Users.ToList());
@@ -25,7 +30,7 @@ namespace PhotoBank.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year };
+                User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year };                
                 var result = await userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -33,10 +38,7 @@ namespace PhotoBank.Controllers
                 }
                 else
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    AddErrors(result);
                 }
             }
             return View(model);
@@ -72,10 +74,7 @@ namespace PhotoBank.Controllers
                 }
                 else
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    AddErrors(result);
                 }                
             }
             return View(model);
@@ -122,10 +121,7 @@ namespace PhotoBank.Controllers
                     }
                     else
                     {
-                        foreach (var error in result.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
+                        AddErrors(result);
                     }
                 }
                 else
@@ -134,6 +130,14 @@ namespace PhotoBank.Controllers
                 }
             }
             return View(model);
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
         }
     }
 }

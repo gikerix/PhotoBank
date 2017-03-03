@@ -6,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PhotoBank.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
+using System.Threading.Tasks;
+using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace PhotoBank
 {
@@ -32,8 +34,7 @@ namespace PhotoBank
 
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<PhotoBankContext>();
             // Add framework services.
-            services.AddMvcCore().AddViews().AddRazorViewEngine();
-           
+            services.AddMvcCore().AddViews().AddRazorViewEngine().AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +61,21 @@ namespace PhotoBank
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            DatabaseInitialize(app.ApplicationServices).Wait();
+        }
+
+        public async Task DatabaseInitialize(IServiceProvider serviceProvider)
+        {            
+            RoleManager<IdentityRole> roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if (await roleManager.FindByNameAsync("admin") == null)
+            {
+                await roleManager.CreateAsync(new IdentityRole("admin"));
+            }
+            if (await roleManager.FindByNameAsync("user") == null)
+            {
+                await roleManager.CreateAsync(new IdentityRole("user"));
+            }
         }
     }
 }

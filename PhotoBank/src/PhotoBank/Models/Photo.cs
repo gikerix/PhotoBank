@@ -21,6 +21,8 @@ namespace PhotoBank.Models
         
         public string FileExtention { get; set; }
 
+        public string UploadedBy { get; set; }
+
         public List<PhotoTags> PhotoTags {get; set; }
     }
 }

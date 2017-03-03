@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using PhotoBank.Models;
 using PhotoBank.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PhotoBank.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
         RoleManager<IdentityRole> roleManager;

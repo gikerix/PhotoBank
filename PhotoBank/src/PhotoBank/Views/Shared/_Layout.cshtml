@@ -34,8 +34,14 @@
                     <li><a asp-area="" asp-controller="Tags" asp-action="Index">Tags</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>                    
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                    {
+                        <li><a asp-area="" asp-controller="Users" asp-action="Index">Users</a></li>
+                        <li><a asp-area="" asp-controller="Roles" asp-action="Index">Roles</a></li>
+                    }
                 </ul>                    
+                
                 <div class="nav pull-right" style="padding:15px">
                     @if (User.Identity.IsAuthenticated)
                     {
@@ -43,7 +49,6 @@
                         <form method="post" asp-controller="Account" asp-action="LogOff" style="display:inline">
                             <input type="submit" value="Sign out" class="submitLink" />
                         </form>
-
                     }
                     else
                     {
