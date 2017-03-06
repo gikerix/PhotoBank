@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace PhotoBank.Models
@@ -21,7 +22,7 @@ namespace PhotoBank.Models
         
         public string FileExtention { get; set; }
 
-        public string UploadedBy { get; set; }
+        public Guid? UploadedByUserID { get; set; }
 
         public List<PhotoTags> PhotoTags {get; set; }
     }

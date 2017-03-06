@@ -8,9 +8,10 @@ using PhotoBank.Models;
 namespace PhotoBank.Migrations
 {
     [DbContext(typeof(PhotoBankContext))]
-    partial class PhotoBankContextModelSnapshot : ModelSnapshot
+    [Migration("20170306012638_M3")]
+    partial class M3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
