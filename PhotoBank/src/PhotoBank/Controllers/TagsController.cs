@@ -1,18 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Collections.Generic;
 using PhotoBank.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace PhotoBank.Controllers
 {
     public class TagsController : Controller
     {
         private PhotoBankContext db;
+        private UserManager<User> userManager;
 
-        public TagsController(PhotoBankContext context)
+        public TagsController(PhotoBankContext Context, UserManager<User> UserManager)
         {
-            db = context;
+            db = Context;
+            userManager = UserManager;
         }
 
         public IActionResult Index()
@@ -41,10 +43,11 @@ namespace PhotoBank.Controllers
 
         public IActionResult TagPhotos(int tagID)
         {
+            string userID = userManager.GetUserId(HttpContext.User);
             return View(new ViewModels.TagsPhotoIndexViewModel()
                         {
                             Photos = db.PhotoTags.Include(pt => pt.Photo).
-                                                  Where(pt => pt.TagID == tagID).
+                                                  Where(pt => pt.TagID == tagID && (pt.Photo.UploadedByUserID == userID || pt.Photo.UploadedByUserID == null)).
                                                   Select(pt => pt.Photo).ToList()
                         });
         }

@@ -22,7 +22,7 @@ namespace PhotoBank.Models
         
         public string FileExtention { get; set; }
 
-        public Guid? UploadedByUserID { get; set; }
+        public string UploadedByUserID { get; set; }
 
         public List<PhotoTags> PhotoTags {get; set; }
     }

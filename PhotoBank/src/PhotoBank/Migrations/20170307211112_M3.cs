@@ -8,7 +8,7 @@ namespace PhotoBank.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<Guid>(
+            migrationBuilder.AddColumn<string>(
                 name: "UploadedByUserID",
                 table: "Photos",
                 nullable: true);

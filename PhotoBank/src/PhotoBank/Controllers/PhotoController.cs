@@ -4,23 +4,26 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using Microsoft.AspNetCore.Identity;
 using PhotoBank.Models;
 using PhotoBank.ViewModels;
+
 namespace PhotoBank.Controllers
-{
+{    
     public class PhotoController : Controller
     {
         // GET: /<controller>/
         private PhotoBankContext db;
-
-        public PhotoController(PhotoBankContext context)
+        private UserManager<User> userManager;
+        public PhotoController(PhotoBankContext Context, UserManager<User> UserManager)
         {
-            db = context;
+            db = Context;
+            userManager = UserManager;
         }
 
         public IActionResult Index()
         {
+            string userID = userManager.GetUserId(HttpContext.User);
             TagsPhotoIndexViewModel viewModel = new TagsPhotoIndexViewModel();
             viewModel.TagSelectionList = db.Tags.Select(t => new SelectListItem()
                                                             {
@@ -28,7 +31,7 @@ namespace PhotoBank.Controllers
                                                                 Value = t.TagID.ToString(),
                                                             });
             var photoTags = db.PhotoTags.Include(pt => pt.Tag).Include(pt => pt.Photo);
-            var photos = db.Photos.Include(p => p.PhotoTags);
+            var photos = db.Photos.Where(p => p.UploadedByUserID == userID || p.UploadedByUserID == null).Include(p => p.PhotoTags);
             foreach (var photo in photos)
             {
                 photo.PhotoTags = photoTags.Where(pt => pt.PhotoID == photo.PhotoID).ToList();
@@ -43,6 +46,7 @@ namespace PhotoBank.Controllers
             var photos = Request.Form.Files;
             if (photos.Count == 0)
                 return RedirectToAction("Index");
+            string userID = userManager.GetUserId(HttpContext.User);
             foreach (var photo in photos)
             {
                 if (photo.Length <= 0)
@@ -54,7 +58,8 @@ namespace PhotoBank.Controllers
                     {
                         Data = data,
                         Name = string.IsNullOrEmpty(photoName.Trim()) ? "Default Name" : photoName,
-                        FileExtention = System.IO.Path.GetExtension(photo.FileName),
+                        FileExtention = Path.GetExtension(photo.FileName),
+                        UploadedByUserID = userID
                     });
                 }               
             }

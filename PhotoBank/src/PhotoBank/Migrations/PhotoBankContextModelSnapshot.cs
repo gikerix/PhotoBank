@@ -136,7 +136,7 @@ namespace PhotoBank.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<Guid?>("UploadedByUserID");
+                    b.Property<string>("UploadedByUserID");
 
                     b.HasKey("PhotoID");
 

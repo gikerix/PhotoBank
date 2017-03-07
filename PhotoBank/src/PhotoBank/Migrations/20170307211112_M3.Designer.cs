@@ -8,7 +8,7 @@ using PhotoBank.Models;
 namespace PhotoBank.Migrations
 {
     [DbContext(typeof(PhotoBankContext))]
-    [Migration("20170306012638_M3")]
+    [Migration("20170307211112_M3")]
     partial class M3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -137,7 +137,7 @@ namespace PhotoBank.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<Guid?>("UploadedByUserID");
+                    b.Property<string>("UploadedByUserID");
 
                     b.HasKey("PhotoID");
 
