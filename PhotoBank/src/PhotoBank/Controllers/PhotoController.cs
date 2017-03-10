@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PhotoBank.Models;
+using PhotoBank.ViewModels;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.AspNetCore.Identity;
-using PhotoBank.Models;
-using PhotoBank.ViewModels;
+using System.Threading.Tasks;
 
 namespace PhotoBank.Controllers
 {    
@@ -21,9 +22,10 @@ namespace PhotoBank.Controllers
             userManager = UserManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            string userID = userManager.GetUserId(HttpContext.User);
+            User user = await userManager.GetUserAsync(HttpContext.User);
+            string userID = user.Id;
             TagsPhotoIndexViewModel viewModel = new TagsPhotoIndexViewModel();
             viewModel.TagSelectionList = db.Tags.Select(t => new SelectListItem()
                                                             {

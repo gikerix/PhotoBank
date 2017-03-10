@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PhotoBank.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Threading.Tasks;
 using System;
-using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace PhotoBank
 {
@@ -35,6 +36,7 @@ namespace PhotoBank
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<PhotoBankContext>();
             // Add framework services.
             services.AddMvcCore().AddViews().AddRazorViewEngine().AddAuthorization();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

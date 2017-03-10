@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using PhotoBank.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PhotoBank.Models;
+using System.Threading.Tasks;
 
 namespace PhotoBank.TagHelpers
 {
@@ -13,11 +16,22 @@ namespace PhotoBank.TagHelpers
         public int CellsPerRow { get; set; }
         public bool ShowControls { get; set; }
         private List<Photo> photos;
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        private UserManager<User> userManager;
+        private IActionContextAccessor actionContextAccessor;
+        private User currentUser;
+        private bool isAdmin;
+        public PhotosTagHelper(UserManager<User> UserManager, IActionContextAccessor ActionContextAccessor)
+        {
+            userManager = UserManager;
+            actionContextAccessor = ActionContextAccessor;            
+        }
+        public override async void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "table";            
             photos = photoContent.Photos.ToList();            
             int cellsPerRow = 3;
+            currentUser = await userManager.GetUserAsync(actionContextAccessor.ActionContext.HttpContext.User);
+            isAdmin = await userManager.IsInRoleAsync(currentUser, "admin");
             for (int i = 0; i < photos.Count; i += cellsPerRow)
             {
                 TagBuilder row = makeRow(i);
@@ -31,32 +45,38 @@ namespace PhotoBank.TagHelpers
             if (ShowControls)
             {
                 TagBuilder table = new TagBuilder("table");
-                TagBuilder row = new TagBuilder("tr");
-                row.InnerHtml.AppendHtml(tableCell);
+                TagBuilder fRow = new TagBuilder("tr");
+                TagBuilder sRow = new TagBuilder("tr");
+                fRow.InnerHtml.AppendHtml(tableCell);
                 TagBuilder tagsCell = new TagBuilder("td");
                 tagsCell.MergeAttribute("valign", "top");
                 tagsCell.InnerHtml.Clear();
-                TagBuilder tagSelector = makeTagSelector();
-                tagSelector.Attributes.Clear();
-                tagSelector.MergeAttribute("onchange", string.Format("AttachTagToPhoto(this.value, {0})", photo.PhotoID));
-                tagsCell.InnerHtml.AppendHtml(tagSelector);
-                tagsCell.InnerHtml.AppendHtml(makeTagTable(photo.PhotoTags));
-                row.InnerHtml.AppendHtml(tagsCell);
-                table.InnerHtml.AppendHtml(row);
-                TagBuilder secondRow = new TagBuilder("tr");
-                TagBuilder downloadCell = new TagBuilder("td");
-                TagBuilder downloadAction = new TagBuilder("a");
-                downloadAction.InnerHtml.Append("Download");
-                downloadAction.MergeAttribute("href", string.Format("/Photo/DownloadPhoto?photoID={0}", photo.PhotoID));
-                downloadCell.InnerHtml.AppendHtml(downloadAction);
-                secondRow.InnerHtml.AppendHtml(downloadCell);
-                TagBuilder deleteCell = new TagBuilder("td");
-                TagBuilder deleteAction = new TagBuilder("a");
-                deleteAction.InnerHtml.Append("Delete");
-                deleteAction.MergeAttribute("href", string.Format("/Photo/DeletePhoto?photoID={0}", photo.PhotoID));
-                deleteCell.InnerHtml.AppendHtml(deleteAction);
-                secondRow.InnerHtml.AppendHtml(deleteCell);
-                table.InnerHtml.AppendHtml(secondRow);                
+                if (currentUser != null && (photo.UploadedByUserID == currentUser.Id || isAdmin))
+                {
+                    TagBuilder tagSelector = makeTagSelector();
+                    tagSelector.Attributes.Clear();
+                    tagSelector.MergeAttribute("onchange", string.Format("AttachTagToPhoto(this.value, {0})", photo.PhotoID));
+                    tagsCell.InnerHtml.AppendHtml(tagSelector);
+                    tagsCell.InnerHtml.AppendHtml(makeTagTable(photo.PhotoTags));
+                    fRow.InnerHtml.AppendHtml(tagsCell);                    
+                    TagBuilder deleteCell = new TagBuilder("td");
+                    TagBuilder deleteAction = new TagBuilder("a");
+                    deleteAction.InnerHtml.Append("Delete");
+                    deleteAction.MergeAttribute("href", string.Format("/Photo/DeletePhoto?photoID={0}", photo.PhotoID));
+                    deleteCell.InnerHtml.AppendHtml(deleteAction);
+                    sRow.InnerHtml.AppendHtml(deleteCell);
+                }
+                table.InnerHtml.AppendHtml(fRow);
+                if (currentUser != null)
+                {
+                    TagBuilder downloadCell = new TagBuilder("td");
+                    TagBuilder downloadAction = new TagBuilder("a");
+                    downloadAction.InnerHtml.Append("Download");
+                    downloadAction.MergeAttribute("href", string.Format("/Photo/DownloadPhoto?photoID={0}", photo.PhotoID));
+                    downloadCell.InnerHtml.AppendHtml(downloadAction);
+                    sRow.InnerHtml.AppendHtml(downloadCell);
+                }
+                table.InnerHtml.AppendHtml(sRow);
                 return table;
             }
             else
@@ -107,7 +127,7 @@ namespace PhotoBank.TagHelpers
             TagBuilder image = new TagBuilder("img");        
             var base64 = Convert.ToBase64String(photo.Data);
             image.MergeAttribute("src", string.Format("data:image/gif;base64,{0}", base64));
-            image.MergeAttribute("style", "height: 100px; width: 100px; border: 4px double black; margin:10px");
+            image.MergeAttribute("style", "height: 100px; width: 100px; border: 4px double black; margin-right:10px; margin-left:10px");
             imageTableCell.InnerHtml.AppendHtml(image);
             return imageTableCell;
         }
