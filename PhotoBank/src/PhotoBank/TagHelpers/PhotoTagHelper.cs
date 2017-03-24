@@ -23,9 +23,10 @@ namespace PhotoBank.TagHelpers
         public PhotosTagHelper(UserManager<User> UserManager, IActionContextAccessor ActionContextAccessor)
         {
             userManager = UserManager;
-            actionContextAccessor = ActionContextAccessor;            
+            actionContextAccessor = ActionContextAccessor;
         }
-        public override async void Process(TagHelperContext context, TagHelperOutput output)
+
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "table";            
             photos = photoContent.Photos.ToList();            
@@ -36,7 +37,7 @@ namespace PhotoBank.TagHelpers
             {
                 TagBuilder row = makeRow(i);
                 output.Content.AppendHtml(row);
-            }
+            }           
         }
 
         private TagBuilder makeCellTable(Photo photo)
