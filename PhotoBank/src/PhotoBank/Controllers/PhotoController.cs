@@ -25,7 +25,7 @@ namespace PhotoBank.Controllers
         public async Task<IActionResult> Index()
         {
             User user = await userManager.GetUserAsync(HttpContext.User);
-            string userID = user.Id;
+            string userID = user?.Id;
             TagsPhotoIndexViewModel viewModel = new TagsPhotoIndexViewModel();
             viewModel.TagSelectionList = db.Tags.Select(t => new SelectListItem()
                                                             {

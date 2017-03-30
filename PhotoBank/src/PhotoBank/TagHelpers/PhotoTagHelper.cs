@@ -24,6 +24,7 @@ namespace PhotoBank.TagHelpers
         {
             userManager = UserManager;
             actionContextAccessor = ActionContextAccessor;
+            isAdmin = false;
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -32,7 +33,8 @@ namespace PhotoBank.TagHelpers
             photos = photoContent.Photos.ToList();            
             int cellsPerRow = 3;
             currentUser = await userManager.GetUserAsync(actionContextAccessor.ActionContext.HttpContext.User);
-            isAdmin = await userManager.IsInRoleAsync(currentUser, "admin");
+            if (currentUser != null)
+                isAdmin = await userManager.IsInRoleAsync(currentUser, "admin");
             for (int i = 0; i < photos.Count; i += cellsPerRow)
             {
                 TagBuilder row = makeRow(i);
