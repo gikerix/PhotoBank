@@ -32,9 +32,9 @@ namespace PhotoBank.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult DeleteTag(int tagIndex)
+        public IActionResult DeleteTag(int tagID)
         {
-            var tag = db.Tags.Where(p => p.TagID == tagIndex);
+            var tag = db.Tags.Where(p => p.TagID == tagID);
             foreach (var t in tag)
                 db.Tags.Remove(t);
             db.SaveChanges();
